@@ -58,6 +58,7 @@ router.post("/register", async (req, res) => {
 
     res
       .cookie("token", token, {
+        
         secure:true,
         httpOnly: true,
       })
@@ -134,7 +135,12 @@ router.post("/login", async (req, res) => {
     //use cookies
     res
       .cookie("token", token, {
+        path:"/",
+     
+       secure:true,
         httpOnly: true,
+        sameSite:'none',
+        
       })
       .send(existinguser);
   } catch (err) {

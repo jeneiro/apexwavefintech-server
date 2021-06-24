@@ -3,10 +3,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
-var cookieSession = require('cookie-session')
+//var cookieSession = require('cookie-session')
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const session = require("express-session");
+//const session = require("express-session");
 dotenv.config();
 
 //connect to server
@@ -35,16 +35,16 @@ mongoose.connect(
     console.log("MongoDB Connected!");
   }
 );
-app.use(session({
-  name:"random-session",
-  secret:"XXXwwwXXX2!",
-  proxy:true,
-  cookie:{
-    path: "/",
-    secure:"true",
-    httpOnly:true
-  }
-}));
+// app.use(session({
+//   name:"random-session",
+//   secret:"XXXwwwXXX2!",
+//   proxy:true,
+//   cookie:{
+//     path: "/",
+//     secure:"true",
+//     httpOnly:true
+//   }
+// }));
 //setup middleware
 //app.use(express.static('./'))
 app.use("/auth", require("./routers/userRouter"));
