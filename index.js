@@ -3,7 +3,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
+var cookieSession = require('cookie-session')
+//const cookieParser = require("cookie-parser");
 const cors = require("cors");
 dotenv.config();
 
@@ -11,12 +12,23 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 app.set('trust proxy', 1);
+app.enable('trust proxy');
 app.listen(PORT, () => {
   console.log(`server started on : ${PORT}`);
 });
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+//app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+
+  keys: ["XXX"],
+  secureProxy:true,
+  proxy : true, 
+
+  // Cookie Options
+  maxAge: 24 * 60 * 60 * 1000 // 24 hours
+}))
 app.use(cors({ origin: ["http://localhost:3000"], credentials: true }));
 
 //app.get("/test", (req, res)=>{ res.send("it works!")})
