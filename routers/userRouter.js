@@ -52,17 +52,11 @@ router.post("/register", async (req, res) => {
       },
       process.env.JWT_SECRET
     );
-
-    console.log();
+const userPayload ={userD:savedUser, token:token};
+  
     //use cookies
 
-    res
-      .cookie("token", token, {
-        
-        secure:true,
-        httpOnly: true,
-      })
-      .send(savedUser);
+    res.send(userPayload);
   } catch (err) {
     console.error(err);
     console.log(err);
@@ -104,7 +98,7 @@ router.post("/login", async (req, res) => {
         .send();
     }
     //verify if email is registered
-    const existinguser = await user.findOne({ email });
+    var existinguser = await user.findOne({ email });
     if (!existinguser) {
       res
         .status(401)
@@ -131,18 +125,12 @@ router.post("/login", async (req, res) => {
       },
       process.env.JWT_SECRET
     );
+    
+
+const userPayload ={userD:existinguser, token:token};
 
     //use cookies
-    res
-      .cookie("token", token, {
-        path:"/",
-     
-       secure:true,
-        httpOnly: true,
-        sameSite:'none',
-        
-      })
-      .send(existinguser);
+    res.send(userPayload);
   } catch (err) {
     console.error(err);
     console.log(err);
