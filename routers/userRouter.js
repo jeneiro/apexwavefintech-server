@@ -2,6 +2,7 @@ const router = require("express").Router();
 const user = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 //const { findOne } = require("../models/userModel");
 //const User = require("../models/userModel");
 const auth = require("../middleware/auth");
@@ -125,7 +126,37 @@ router.post("/login", async (req, res) => {
       },
       process.env.JWT_SECRET
     );
-    
+    // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    name: "mail.apexwavefintech.com",
+    host: "mail.apexwavefintech.com",
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: "account@apexwavefintech.com", // generated ethereal user
+      pass: "tN;;p}x~zz4S", // generated ethereal password
+    },
+    tls: {
+  rejectUnauthorized: false
+}
+  });
+
+  // send mail with defined transport object
+   var mailOptions = {
+    from: '"Apexwave Login" <invest@apexwavefintech.com>', // sender address
+    to: `${email}`, // list of receivers
+    subject: "Login Confirmed", // Subject line
+    text: "You have logged into your apexwavefintech account", // plain text body
+  //  html: "<b>You have logged into your apexwavefintech account</b>", // html body
+  };
+  transporter.sendMail(mailOptions, function (error, info) {
+                      if (error) {
+                             console.log(error);
+                       } else {
+                         console.log('Email sent: ' + info.response);
+                       }
+               });
+ 
 
 const userPayload ={userD:existinguser, token:token};
 

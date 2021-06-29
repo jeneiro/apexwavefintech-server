@@ -85,6 +85,20 @@ router.get("/detail/:id", auth, async (req, res) => {
     res.status(500).send();
   }
 });
+router.get("/checkCode/:id",  async (req, res) => {
+  try {
+    const { id } = req.params;
+    const member = await Member.findOne({ referralCode: id });
+    if (!member) return res.json(false);
+    else
+    res.status(200).json(true);
+    // res.send("hi")
+  } catch (err) {
+    console.error(err);
+    console.log(err);
+    res.status(500).send();
+  }
+});
 router.get("/referrer/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
