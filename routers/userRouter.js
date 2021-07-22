@@ -145,7 +145,41 @@ const userPayload ={userD:existinguser, token:token};
 });
 
 //logout
+router.post("/email", async (req, res) => {
+  try {
+    //mail Client
+    let { title, message, email } = req.body;
+    const transporter = nodemailer.createTransport({
+      name: "mail.apexwavefintech.com",
+      host: "apexwavefintech.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "register@apexwavefintech.com",
+        pass: "apexwave@123",
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
 
+    const msg = {
+      from: "Apexwave Fintech<register@apexwavefintech.com>", // sender address
+      //to: `${email}`, // list of receivers
+      to: email,
+      subject: title, // Subject line
+      text: message, // plain text body
+    };
+    // send mail with defined transport object
+    const info = await transporter.sendMail(msg);
+
+    res.send("Message Sent");
+  } catch (err) {
+    console.error(err);
+    console.log(err);
+    res.status(500).send();
+  }
+});
 router.get("/logout", (req, res) => {
   res
     .cookie("token", "", {
