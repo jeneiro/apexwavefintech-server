@@ -200,4 +200,48 @@ router.get("/loggedIn", (req, res) => {
     res.json(false);
   }
 });
+
+
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email, password, verifypassword } = req.body;
+    if (!email || !password || !verifypassword) {
+      res
+        .status(400)
+        .json({ "error message": "please enter all required fields" })
+        .send();
+    }
+    if (password.length < 6) {
+      res
+        .status(400)
+        .json({ "error message": "Password should be at least 6 characters" })
+        .send();
+    }
+    if (password != verifypassword) {
+      res
+        .status(400)
+        .json({ "error message": "Password does not match verified Password" });
+    }
+    const existingUser = await user.findOne({ email });
+    if (existingUser) {
+      const salt = await bcrypt.genSalt();
+      const passwordHash = await bcrypt.hash(password, salt);
+      const newUser = new user({ passwordHash });
+      var newPassword = { $set: { passwordHash: passwordHash } };
+
+      const updateStatus = await user.updateOne(
+        { email: email },
+        newPassword,
+        function (err, res) {
+          if (err) throw err;
+        }
+      );
+      res.send("Password Reset");
+    }
+  } catch (err) {
+    console.error(err);
+    console.log(err);
+    res.status(500).send();
+  }
+});
 module.exports = router;
