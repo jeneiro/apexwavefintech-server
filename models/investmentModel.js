@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const investmentSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   amount: { type: Number, required: true },
-  referrer: { type: String, required: true },
+  referrer: { type: String },
   status: {
     type: String,
     enum: ["Pending", "Payment Confirmed"],
